@@ -1,0 +1,80 @@
+<div class="max-w-6xl mx-auto p-6">
+
+    <div class="flex flex-col md:flex-row justify-between items-center mb-4">
+      <h2 class="text-2xl font-semibold text-gray-700">Transactions</h2>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="filterTransactions()"
+        class="border p-2 rounded w-full md:w-1/3"
+        placeholder="Search by Account Number or Type..."
+      />
+    </div>
+  
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+      <table class="min-w-full bg-white border rounded-lg">
+        <thead>
+          <tr class="bg-gray-200 text-gray-700">
+            <th class="p-3 text-left">Transaction ID</th>
+            <th class="p-3 text-left">Account No.</th>
+            <th class="p-3 text-left">Type</th>
+            <th class="p-3 text-left">Amount</th>
+            <th class="p-3 text-left">Recipient</th>
+            <th class="p-3 text-left">Status</th>
+            <th class="p-3 text-left">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let transaction of filteredTransactions" class="border-b hover:bg-gray-100">
+            <td class="p-3 text-sm">{{ transaction.transactionId.substring(0, 13) }}</td>
+            <td class="p-3 text-sm">{{ transaction.accountNumber }}</td>
+            <td class="p-3 text-sm">
+              <span
+                class="px-2 py-1 text-xs font-semibold rounded-full"
+                [ngClass]="{
+                  'bg-green-200 text-green-800': transaction.type === 'Credit',
+                  'bg-red-200 text-red-800': transaction.type === 'Debit'
+                }"
+              >
+                {{ transaction.type }}
+              </span>
+            </td>
+            <td class="p-3 text-sm">{{ transaction.amount | currency }}</td>
+            <td class="p-3 text-sm">{{ transaction.recipientAccountNumber }}</td>
+            <td class="p-3 text-sm">
+              <span
+                class="px-2 py-1 text-xs font-semibold rounded-full"
+                [ngClass]="{
+                  'bg-yellow-200 text-yellow-800': transaction.status === 'Pending',
+                  'bg-green-200 text-green-800': transaction.status === 'Completed',
+                  'bg-red-200 text-red-800': transaction.status === 'Failed'
+                }"
+              >
+                {{ transaction.status }}
+              </span>
+            </td>
+            <td class="p-3 text-sm">{{ transaction.createdAt | date: 'short' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <div class="flex justify-between items-center mt-4">
+      <button
+        (click)="previousPage()"
+        [disabled]="pageNumber === 1"
+        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+      >
+        Previous
+      </button>
+      <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+      <button
+        (click)="nextPage()"
+        [disabled]="pageNumber >= totalPages"
+        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+  
