@@ -1,0 +1,40 @@
+<header class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto flex justify-between items-center h-16 px-4">
+    <!-- Left Section (Logo & Title) -->
+    <div class="flex items-center">
+      <img
+        class="w-14"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmGHT2J0fmfIWHNz4W6g-DZKcl5KhmLnwT3A&s"
+        alt=""
+      />
+      <a [routerLink]="homeLink" class="text-primary-600 font-bold text-xl ml-2">
+        TrackWizz Bank
+      </a>
+    </div>
+
+    <!-- Right Section (Navigation & User Menu) -->
+    <div class="flex items-center space-x-6">
+      <!-- Navigation Links -->
+      <div class="hidden md:flex space-x-8">
+        <ng-content></ng-content>
+      </div>
+
+      <!-- User Profile Menu -->
+      <div class="relative flex items-center">
+        <button
+          type="button"
+          class="flex items-center max-w-xs rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+        >
+          <span class="sr-only">Open user menu</span>
+          <img
+            class="w-8 h-8 rounded-full"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSCCyUKI82rttHx9nGEzJFqHvdlZHo9jfJ9Sw&s"
+            alt=""
+          />
+          <span class="ml-2 text-gray-700">{{ username }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
