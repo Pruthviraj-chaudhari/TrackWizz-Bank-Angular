@@ -1,0 +1,11 @@
+<div class="min-h-screen bg-gray-100 flex flex-col">
+  <app-header username="Admin" homeLink="/admin/dashboard"></app-header>
+
+  <div class="flex-1 flex">
+    <app-sidebar [items]="sidebarItems"></app-sidebar>
+
+    <main class="flex-1 p-6 overflow-y-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
