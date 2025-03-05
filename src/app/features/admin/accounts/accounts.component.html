@@ -1,0 +1,154 @@
+<div class="container mx-auto p-6">
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-xl font-semibold mb-4">Create New Account</h2>
+    <form [formGroup]="accountForm" (ngSubmit)="createAccount()">
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block font-medium">Select Customer</label>
+          <select formControlName="userId" class="w-full border p-2 rounded">
+            <option
+              *ngFor="let customer of customers"
+              [ngValue]="customer.customerId"
+            >
+              {{ customer.fullName }} ({{ customer.email }})
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-medium">Account Type</label>
+          <select
+            formControlName="accountType"
+            class="w-full border p-2 rounded"
+          >
+            <option value="Savings">Savings</option>
+            <option value="Current">Current</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-medium">Initial Balance</label>
+          <input
+            type="number"
+            formControlName="initialBalance"
+            class="w-full border p-2 rounded"
+            placeholder="Enter initial balance"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="mt-4 bg-primary-100 text-primary-700 font-medium px-4 py-2 rounded-xl"
+      >
+        Create Account
+      </button>
+    </form>
+
+    <div *ngIf="createdAccount" class="mt-4 p-4 border rounded bg-green-100">
+      <p><strong>Account Created Successfully!</strong></p>
+      <p>Account Number: {{ createdAccount.accountNumber }}</p>
+      <button
+        (click)="downloadPassbook(createdAccount)"
+        class="mt-2 bg-gray-700 text-white px-4 py-2 rounded"
+      >
+        Download Passbook
+      </button>
+    </div>
+  </div>
+
+  <div class="flex justify-between items-center mb-4">
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (input)="filterAccounts()"
+      class="border p-2 rounded w-1/3"
+      placeholder="Search Account..."
+    />
+
+    <div class="flex space-x-4">
+      <select
+        [(ngModel)]="filterType"
+        (change)="filterAccounts()"
+        class="border p-2 rounded"
+      >
+        <option value="">All Types</option>
+        <option value="Savings">Savings</option>
+        <option value="Current">Current</option>
+      </select>
+
+      <select
+        [(ngModel)]="filterStatus"
+        (change)="filterAccounts()"
+        class="border p-2 rounded"
+      >
+        <option value="">All Status</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+    <table class="min-w-full bg-white border rounded-lg">
+      <thead class="rounded-full">
+        <tr class="bg-gray-200 text-gray-700">
+          <th class="p-2">Account Number</th>
+          <th class="p-2">Customer Name</th>
+          <th class="p-2">Account Type</th>
+          <th class="p-2">Balance</th>
+          <th class="p-2">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of filteredAccounts" class="border-t">
+          <td class="p-2">{{ account.accountNumber }}</td>
+          <td class="p-2">{{ account.fullName }}</td>
+          <td class="p-2">
+            <span
+              class="px-2 py-1 text-xs font-semibold rounded"
+              [ngClass]="{
+                'bg-violet-200 text-violet-700':
+                  account.accountType === 'Savings',
+                'bg-slate-300 text-slate-800': account.accountType === 'Current'
+              }"
+            >
+              {{ account.accountType }}
+            </span>
+          </td>
+          <td class="p-2">{{ account.balance }}</td>
+          <td class="p-2">
+            <span
+              class="px-2 py-1 text-xs font-semibold rounded"
+              [ngClass]="{
+                'bg-green-200 text-green-700': account.status === 'Active',
+                'bg-yellow-200 text-yellow-700': account.status === 'Inactive',
+                'bg-red-200 text-red-700': account.status === 'Blocked'
+              }"
+            >
+              {{ account.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex justify-between items-center mt-4">
+    <button
+      (click)="previousPage()"
+      [disabled]="pageNumber === 1"
+      class="bg-gray-500 text-white px-3 py-1 rounded"
+    >
+      Prev
+    </button>
+    <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+    <button
+      (click)="nextPage()"
+      [disabled]="pageNumber >= totalPages"
+      class="bg-gray-500 text-white px-3 py-1 rounded"
+    >
+      Next
+    </button>
+  </div>
+</div>
