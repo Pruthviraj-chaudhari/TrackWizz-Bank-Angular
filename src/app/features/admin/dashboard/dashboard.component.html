@@ -1,0 +1,141 @@
+<div class="p-6 space-y-6">
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div *ngFor="let stat of stats" class="bg-white rounded-xl shadow-sm p-6">
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-secondary-500 text-sm font-medium">{{ stat.title }}</p>
+          <h3 class="text-2xl font-bold mt-1 text-secondary-900">
+            {{ stat.value }}
+          </h3>
+        </div>
+        <div [ngClass]="stat.bgColor" class="p-3 rounded-lg">
+          <ng-icon name="{{ stat.icon }}"></ng-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Transactions -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-bold text-secondary-900">
+          Recent Transactions
+        </h2>
+        <button
+          (click)="navigateToTransactions()"
+          class="text-primary-600 text-sm font-medium hover:text-primary-700"
+        >
+          View All
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr
+              class="text-left text-secondary-500 text-sm border-b border-secondary-200"
+            >
+              <th
+                *ngFor="
+                  let column of [
+                    'Transaction ID',
+                    'Acc. No.',
+                    'Type',
+                    'Amount',
+                    'Status',
+                    'Date & Time'
+                  ]
+                "
+                class="pb-3 font-medium"
+              >
+                {{ column }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let tx of transactions"
+              class="border-b border-secondary-100 text-sm"
+            >
+              <td class="py-4 font-medium text-secondary-900">
+                {{ tx.transactionId.substring(0, 8) }}
+              </td>
+              <td class="py-4 text-secondary-800">{{ tx.accountNumber }}</td>
+              <td class="py-4">
+                <span
+                  [ngClass]="{
+                    'bg-green-100 text-green-800': tx.type === 'Credit',
+                    'bg-red-100 text-red-800': tx.type === 'Debit'
+                  }"
+                  class="px-2 py-1 rounded-full text-xs font-medium"
+                >
+                  {{ tx.type }}
+                </span>
+              </td>
+              <td class="py-4 font-medium text-secondary-900">
+                {{ tx.amount }}
+              </td>
+              <td class="py-4">
+                <span
+                  [ngClass]="{
+                    'bg-violet-100 text-violet-800': tx.status === 'Completed',
+                    'bg-yellow-100 text-yellow-800': tx.status === 'Pending',
+                    'bg-red-100 text-red-800': tx.status === 'Failed'
+                  }"
+                  class="px-2 py-1 rounded-full text-xs font-medium"
+                >
+                  {{ tx.status }}
+                </span>
+              </td>
+              <td class="py-4 text-secondary-500">
+                {{ tx.createdAt | date : "MMM d, y h:mm a" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Alerts & Notifications -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-bold text-secondary-900">
+          Alerts & Notifications
+        </h2>
+        <button
+          (click)="navigateToTransactions()"
+          class="text-primary-600 text-sm font-medium hover:text-primary-700"
+        >
+          View All
+        </button>
+      </div>
+
+      <div class="space-y-4">
+        <div
+          *ngFor="let alert of alerts"
+          [ngClass]="{
+            'border-red-500 bg-red-50': alert.severity === 'high',
+            'border-yellow-500 bg-yellow-50': alert.severity === 'medium',
+            'border-blue-500 bg-blue-50': alert.severity === 'low'
+          }"
+          class="p-4 rounded-lg border-l-4"
+        >
+          <div class="flex items-start">
+            <i
+              class="mr-3 flex-shrink-0"
+              [ngClass]="{
+                'text-red-500': alert.severity === 'high',
+                'text-yellow-500': alert.severity === 'medium',
+                'text-blue-500': alert.severity === 'low'
+              }"
+            >
+              🔔
+            </i>
+            <p class="text-sm text-secondary-800">{{ alert.message }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
