@@ -1,0 +1,138 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+  <h2 class="text-2xl font-semibold mb-4">Customers</h2>
+
+  <div class="flex justify-between items-center mb-4">
+    <div class="flex gap-4 w-full">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="filterCustomers()"
+        placeholder="Search by name, email, or phone"
+        class="p-2 border rounded w-full shadow-sm focus:ring focus:ring-blue-300"
+      />
+      <select
+        [(ngModel)]="selectedStatus"
+        (change)="filterCustomers()"
+        class="p-2 border rounded shadow-sm focus:ring focus:ring-blue-300"
+      >
+        <option value="All">All</option>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+        <option value="Blocked">Blocked</option>
+      </select>
+      <button
+        class="px-4 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 w-40"
+        (click)="openAddCustomerModal()"
+      >
+        Add New
+      </button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table
+      class="w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden"
+    >
+      <thead class="bg-blue-500 text-white">
+        <tr>
+          <th class="p-3 text-left">Name</th>
+          <th class="p-3 text-left">Email</th>
+          <th class="p-3 text-left">Phone</th>
+          <th class="p-3 text-left">Status</th>
+          <th class="p-3 text-left">Accounts</th>
+          <th class="p-3 text-left">Join Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let customer of filteredCustomers"
+          class="border-b hover:bg-gray-100"
+        >
+          <td class="p-3">{{ customer.fullName }}</td>
+          <td class="p-3">{{ customer.email }}</td>
+          <td class="p-3">{{ customer.phoneNumber }}</td>
+          <td class="p-3">
+            <span
+              class="px-2 py-1 text-xs font-semibold rounded"
+              [ngClass]="{
+                'bg-green-200 text-green-700': customer.status === 'Active',
+                'bg-yellow-200 text-yellow-700': customer.status === 'Inactive',
+                'bg-red-200 text-red-700': customer.status === 'Blocked'
+              }"
+            >
+              {{ customer.status }}
+            </span>
+          </td>
+          <td class="p-3">{{ customer.accounts?.length }}</td>
+          <td class="p-3">{{ customer.createdAt | date : "dd/MM/yyyy" }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex justify-between items-center mt-4">
+    <button
+      (click)="previousPage()"
+      [disabled]="pageNumber === 1"
+      class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+    >
+      Previous
+    </button>
+    <span>Page {{ pageNumber }} of {{ totalPages }}</span>
+    <button
+      (click)="nextPage()"
+      [disabled]="pageNumber >= totalPages"
+      class="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+    >
+      Next
+    </button>
+  </div>
+</div>
+
+<!-- Add New Customer Modal -->
+<div
+  *ngIf="showAddCustomerModal"
+  class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center"
+>
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h3 class="text-xl font-semibold mb-4">Add New Customer</h3>
+    <input
+      type="text"
+      [(ngModel)]="newCustomer.fullName"
+      placeholder="Full Name"
+      class="p-2 border rounded w-full mb-2"
+    />
+    <input
+      type="email"
+      [(ngModel)]="newCustomer.email"
+      placeholder="Email"
+      class="p-2 border rounded w-full mb-2"
+    />
+    <input
+      type="text"
+      [(ngModel)]="newCustomer.phoneNumber"
+      placeholder="Phone Number"
+      class="p-2 border rounded w-full mb-2"
+    />
+    <input
+      type="password"
+      [(ngModel)]="newCustomer.password"
+      placeholder="Password"
+      class="p-2 border rounded w-full mb-2"
+    />
+    <div class="flex justify-end gap-2">
+      <button
+        (click)="closeAddCustomerModal()"
+        class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+      >
+        Cancel
+      </button>
+      <button
+        (click)="saveNewCustomer()"
+        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
