@@ -1,0 +1,57 @@
+<div class="container mx-auto p-6">
+  <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+    <h2 class="text-xl font-semibold mb-4">Transfer Money</h2>
+    <form [formGroup]="moneyTransferForm" (ngSubmit)="transferMoney()">
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <label class="block font-medium">Sender Account Number</label>
+          <input
+            type="text"
+            formControlName="senderAccountNumber"
+            class="w-full border p-2 rounded"
+            placeholder="ACCxxxxxxxxxx"
+          />
+        </div>
+
+        <div>
+          <label class="block font-medium">Recipient Account Number</label>
+          <input
+            type="text"
+            formControlName="recipientAccountNumber"
+            class="w-full border p-2 rounded"
+            placeholder="ACCxxxxxxxxxx"
+          />
+        </div>
+
+        <div>
+          <label class="block font-medium">Amount</label>
+          <input
+            type="number"
+            formControlName="amount"
+            class="w-full border p-2 rounded"
+            placeholder="Enter amount to tranfer"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Transfer Money
+      </button>
+    </form>
+
+    <div *ngIf="successMessage" class="mt-4 p-4 border rounded bg-green-100">
+        <p><strong>{{ successMessage.message }}</strong></p>
+        <p><strong>From Acc.No. :</strong> {{ successMessage.senderAccountNumber }}</p>
+        <p><strong>To Acc.No.:</strong> {{ successMessage.recipientAccountNumber }}</p>
+        <p><strong>Amount Transferred:</strong> {{ successMessage.amount }}</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="mt-4 p-4 border rounded bg-red-100">
+        <p><strong>{{ errorMessage }}</strong></p>
+    </div>
+      
+  </div>
+</div>
